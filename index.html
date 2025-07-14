@@ -1,1 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Link Tree</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .profile-section {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d, #6bcf7f, #4d9de0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 50px;
+            color: white;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .username {
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .bio {
+            color: rgba(255,255,255,0.9);
+            font-size: 16px;
+            line-height: 1.4;
+        }
+
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .link-item {
+            position: relative;
+            transform: translateY(50px);
+            opacity: 0;
+            animation: slideUp 0.6s ease-out forwards;
+        }
+
+        .link-item:nth-child(1) { animation-delay: 0.1s; }
+        .link-item:nth-child(2) { animation-delay: 0.2s; }
+        .link-item:nth-child(3) { animation-delay: 0.3s; }
+        .link-item:nth-child(4) { animation-delay: 0.4s; }
+        .link-item:nth-child(5) { animation-delay: 0.5s; }
+        .link-item:nth-child(6) { animation-delay: 0.6s; }
+        .link-item:nth-child(7) { animation-delay: 0.7s; }
+        .link-item:nth-child(8) { animation-delay: 0.8s; }
+        .link-item:nth-child(9) { animation-delay: 0.9s; }
+        .link-item:nth-child(10) { animation-delay: 1.0s; }
+        .link-item:nth-child(11) { animation-delay: 1.1s; }
+        .link-item:nth-child(12) { animation-delay: 1.2s; }
+
+        .link-button {
+            display: flex;
+            align-items: center;
+            padding: 18px 24px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            background: rgba(255,255,255,0.2);
+        }
+
+        .link-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .link-button:hover::before {
+            left: 100%;
+        }
+
+        .link-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .link-text {
+            flex: 1;
+        }
+
+        .link-arrow {
+            font-size: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .link-button:hover .link-arrow {
+            transform: translateX(5px);
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape1 {
+            width: 80px;
+            height: 80px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape2 {
+            width: 60px;
+            height: 60px;
+            top: 60%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+
+        .shape3 {
+            width: 40px;
+            height: 40px;
+            bottom: 30%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px 10px;
+            }
+            
+            .link-button {
+                padding: 16px 20px;
+                font-size: 14px;
+            }
+            
+            .username {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="shape shape1"></div>
+        <div class="shape shape2"></div>
+        <div class="shape shape3"></div>
+    </div>
+
+    <div class="container">
+        <div class="profile-section">
+            <div class="avatar">🚀</div>
+            <h1 class="username">Mis Proyectos</h1>
+            <p class="bio">Explora mi colección de proyectos web y contenido digital</p>
+        </div>
+
+        <div class="links-container">
+            <div class="link-item">
+                <a href="https://amazing-sprite-521090.netlify.app/" class="link-button" target="_blank">
+                    <div class="link-icon">✨</div>
+                    <div class="link-text">Amazing Sprite</div>
+                    <div class="link-arrow">→</div>
+                </a>
+            </div>
+
+            <div class="link-item">
+                <a href="https://benevolent-fudge-20bbfb.netlify.app/" class="link-button" target="_blank">
+                    <div class="link-icon">🍯</div>
+                    <div class="link-text">Benevolent Fudge</div>
+                    <div class="link-arrow">→</div>
+                </a>
+            </div>
+
+            <div class="link-item">
+                <a href="https://darling-otter-a77f06.netlify.app/" class="link-button" target="_blank">
+                    <div class="link-icon">🦦</div>
+                    <div class="link-text">Darling Otter</div>
+                    <div class="link-arrow">→</div>
+                </a>
+            </div>
+
+            <div class="link-item">
+                <a href="https://fancy-chaja-2f9a28.netlify.app/" class="link-button" target="_blank">
+                    <div class="link-icon">🎩</div>
+                    <div class="link-text">Fancy Chaja</div>
+                    <div class="link-arrow">→</div>
+                </a>
+            </div>
+
+            <div class="link-item">
+                <a href="https://fantastic-kringle-4b2cee.netlify.app/" class="link-button" target="_blank">
+                    <div class="link-icon">🎄</div>
+                    <div class="link-text">Fantastic Kringle</div>
+                    <div class="link-arrow">→</div>
+                </a>
+            </div>
+
+            <div class="link-item">
+                <a href="https://monumental-lollipop-a62e66.netlify.app/" class="link-button" target="_blank">
+                    <div class="link-icon">🍭</div>
+                    <div class="link-text">Monumental Lollipop</div>
+                    <div class="link-arrow">→</div>
+                </a>
+            </div>
+
+            <div class="link-item">
+                <a href="https://rococo-zuccutto-ad7297.netlify.app/" class="link-button" target="_blank">
+                    <div class="link-icon">🎨</div>
+                    <div class="link-text">Rococo Zuccutto</div>
+                    <div class="link-arrow">→</div>
+                </a>
+            </div>
+
+            <div class="link-item">
+                <a href="https://588scintillating-kitsune-29c803.netlify.app/" class="link-button" target="_blank">
+                    <div class="link-icon">🦊</div>
+                    <div class="link-text">Scintillating Kitsune</div>
+                    <div class="link-arrow">→</div>
+                </a>
+            </div>
+
+            <div class="link-item">
+                <a href="https://sparkling-lokum-149eb0.netlify.app/" class="link-button" target="_blank">
+                    <div class="link-icon">💎</div>
+                    <div class="link-text">Sparkling Lokum</div>
+                    <div class="link-arrow">→</div>
+                </a>
+            </div>
+
+            <div class="link-item">
+                <a href="https://stupendous-jalebi-8fd0e2.netlify.app/" class="link-button" target="_blank">
+                    <div class="link-icon">🌟</div>
+                    <div class="link-text">Stupendous Jalebi</div>
+                    <div class="link-arrow">→</div>
+                </a>
+            </div>
+
+            <div class="link-item">
+                <a href="https://tvshowgratis2025.blogspot.com/" class="link-button" target="_blank">
+                    <div class="link-icon">📺</div>
+                    <div class="link-text">TV Show Gratis 2025</div>
+                    <div class="link-arrow">→</div>
+                </a>
+            </div>
+
+            <div class="link-item">
+                <a href="https://verdant-stardust-b91ff8.netlify.app/" class="link-button" target="_blank">
+                    <div class="link-icon">🌿</div>
+                    <div class="link-text">Verdant Stardust</div>
+                    <div class="link-arrow">→</div>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
